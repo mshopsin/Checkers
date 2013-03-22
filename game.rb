@@ -17,10 +17,8 @@ class Game
 
 	def round
 		self.board.display
-		puts "Player: #{self.player1.color}"
 		self.player1.take_turn
 		self.board.display
-		puts "Player: #{self.player2.color}"
 		self.player2.take_turn
 	end
 

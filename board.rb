@@ -2,10 +2,11 @@ require './token.rb'
 require 'colorize'
 
 class Board
-	attr_accessor :board, :tokens
+	attr_accessor :board, :tokens, :game_model
 	def initialize
 		@board = []
 		@tokens = []
+		@game_model = Game_Model.new
 		8.times do |i|
 			row = [nil,nil,nil,nil,nil,nil,nil,nil]
 			self.board << row
@@ -36,7 +37,9 @@ class Board
 	end
 	#.colorize(:background=>black_white(
 	def display
+		puts " 0 1 2 3 4 5 6 7"
 		self.board.each_with_index do |row,y|
+			print "#{y}" 
 			row.each_with_index do |cell,x|
 				if cell.class == Token
 					if (y+x) % 2 == 0
@@ -63,14 +66,12 @@ class Board
 			
 			if token.x == start_x && token.y == start_y && player.color == token.color
 				match_token = token
-				puts "match"
 				break
 			end
 			return false if token.x == start_x && token.y == start_y && player.color != token.color
 		end
-		puts match_token
+		game_model.valid_moves(match_token)
 		return match_token.move_piece(move) unless match_token.nil?
-		puts "fail"
 		return false
 	end
 
@@ -80,6 +81,29 @@ class Board
 
 end
 
+class Game_Model
+
+	def valid_moves(token)
+		moves = []
+		8.times do |x|
+			8.times do |y|
+				move = [token.x,token.y,x,y]
+				moves << move if token.valid_move?(move)
+			end
+		end
+		moves
+	end
+
+	def capture_moves(token)
+		possible = valid_moves(token)
+		possible.select {|move| token.capture_piece?(move)}
+		possible
+	end
+
+	def double_jump(token)
+		token.piece_taken && capture_moves(token).length > 0
+	end
+end
 
 
 
