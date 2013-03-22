@@ -14,3 +14,9 @@ player1.move_my_piece([3,2,4,3])
 board.display
 player2.move_my_piece([1,4,0,3])
 board.display
+player1.move_my_piece([4,3,4,3])
+board.display
+player2.move_my_piece([6,5,5,4])
+board.display
+player1.move_my_piece([7,2,6,3])
+board.display
