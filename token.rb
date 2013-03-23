@@ -40,6 +40,7 @@ class Token
 	end
 
 	def valid_move?(move)
+		return false unless test_direction?(move)
 		if ((!capture_piece?(move) && (move[0]-move[2]).abs == 1) ||
 		   (capture_piece?(move) && (move[0]-move[2]).abs == 2) )&&
 		   (is_diag_move?(move) && is_destination_open?(move))
@@ -47,6 +48,17 @@ class Token
 			return true
 		end
 		false
+	end
+
+	def test_direction?(move)
+		return true if self.status == :Draughts_King
+		return true if self.piece_taken == true
+		if self.color == :black && move[1] > move[3]
+			return false
+		elsif self.color == :white && move[1] < move[3]
+			return false
+		end
+		return true
 	end
 
 	def is_diag_move?(move)

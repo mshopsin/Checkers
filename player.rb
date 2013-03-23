@@ -20,6 +20,7 @@ class Human < Player
 
 	def take_turn
 		invalid_move = false
+		move = []
 		until invalid_move
 			puts "please enter:x1,y1,x2,y2"
 			move_text = gets.chomp
@@ -28,6 +29,8 @@ class Human < Player
 			invalid_move = move_my_piece(move)
 			puts "Invalid Move try again" unless invalid_move
 		end
+
+		take_turn if self.board.can_double_jump?(move,self)
 	end
 	
 	#[x1,y1,x2,y2]

@@ -1,4 +1,5 @@
 require './token.rb'
+require './game_model'
 require 'colorize'
 
 class Board
@@ -59,6 +60,14 @@ class Board
 
 	def move_player_piece(move,player)
 		
+		match_token = find_token(move,player)
+		captures = game_model.capture_moves(match_token) unless match_token.nil?
+		return false if !captures.nil? && captures.length > 0 && !captures.include?(move)
+		return match_token.move_piece(move) unless match_token.nil?
+		return false
+	end
+
+	def find_token(move,player)
 		start_x, start_y = move[0], move[1]
 		
 		match_token = nil
@@ -68,41 +77,17 @@ class Board
 				match_token = token
 				break
 			end
-			return false if token.x == start_x && token.y == start_y && player.color != token.color
+			return nil if token.x == start_x && token.y == start_y && player.color != token.color
 		end
-		game_model.valid_moves(match_token)
-		return match_token.move_piece(move) unless match_token.nil?
-		return false
+		match_token
 	end
 
-	def check_token(move,player,token)
-
+	def can_double_jump?(move,player)
+		fake_move = [move[2],move[3],0,0]
+		token = find_token(fake_move,player)
+		game_model.double_jump(token)
 	end
 
-end
-
-class Game_Model
-
-	def valid_moves(token)
-		moves = []
-		8.times do |x|
-			8.times do |y|
-				move = [token.x,token.y,x,y]
-				moves << move if token.valid_move?(move)
-			end
-		end
-		moves
-	end
-
-	def capture_moves(token)
-		possible = valid_moves(token)
-		possible.select {|move| token.capture_piece?(move)}
-		possible
-	end
-
-	def double_jump(token)
-		token.piece_taken && capture_moves(token).length > 0
-	end
 end
 
 
