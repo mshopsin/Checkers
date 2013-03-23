@@ -21,6 +21,7 @@ class Human < Player
 	def take_turn
 		invalid_move = false
 		move = []
+		puts "Player: #{color}"
 		until invalid_move
 			puts "please enter:x1,y1,x2,y2"
 			move_text = gets.chomp

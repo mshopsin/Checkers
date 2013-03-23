@@ -20,6 +20,6 @@ class Game_Model
 	end
 
 	def double_jump(token)
-		token.piece_taken && capture_moves(token).length > 0
+		!token.nil? && token.piece_taken && capture_moves(token).length > 0
 	end
 end

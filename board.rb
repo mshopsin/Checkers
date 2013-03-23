@@ -85,7 +85,7 @@ class Board
 	def can_double_jump?(move,player)
 		fake_move = [move[2],move[3],0,0]
 		token = find_token(fake_move,player)
-		game_model.double_jump(token)
+		game_model.double_jump(token) unless token.nil?
 	end
 
 end
